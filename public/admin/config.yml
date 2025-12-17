@@ -17,17 +17,72 @@ collections:
     create: true # 允许创建新文件
     slug: "{{slug}}" # 文件名基于 slug
     extension: md
-    format: frontmatter
-    frontmatter_delimiter: ["---", "---"]
+    format: yaml-frontmatter
     fields:
-      - { label: "Title", name: "title", widget: "string", required: true, hint: "文章标题（最多 60 字符）" }
-      - { label: "Description", name: "description", widget: "string", required: true, hint: "文章简短描述（50-160 字符）" }
-      - { label: "Publish Date", name: "publishDate", widget: "datetime", required: true, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Updated Date", name: "updatedDate", widget: "datetime", required: false, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Tags", name: "tags", widget: "list", required: false, default: [], allow_add: true, hint: "输入标签后按回车添加" }
-      - { label: "Draft", name: "draft", widget: "boolean", required: false, default: false, hint: "勾选表示草稿，不会在生产环境显示" }
-      - { label: "Pinned", name: "pinned", widget: "boolean", required: false, default: false, hint: "勾选表示置顶文章" }
-      - { label: "OG Image", name: "ogImage", widget: "string", required: false, hint: "社交媒体分享图片 URL（可选）" }
+      - {
+          label: "Title",
+          name: "title",
+          widget: "string",
+          required: true,
+          hint: "文章标题（最多 60 字符）",
+        }
+      - {
+          label: "Description",
+          name: "description",
+          widget: "string",
+          required: true,
+          hint: "文章简短描述（50-160 字符）",
+        }
+      - {
+          label: "Publish Date",
+          name: "publishDate",
+          widget: "datetime",
+          required: true,
+          format: "YYYY-MM-DD",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+        }
+      - {
+          label: "Updated Date",
+          name: "updatedDate",
+          widget: "datetime",
+          required: false,
+          format: "YYYY-MM-DD",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+        }
+      - {
+          label: "Tags",
+          name: "tags",
+          widget: "list",
+          required: false,
+          default: [],
+          allow_add: true,
+          hint: "输入标签后按回车添加",
+        }
+      - {
+          label: "Draft",
+          name: "draft",
+          widget: "boolean",
+          required: false,
+          default: false,
+          hint: "勾选表示草稿，不会在生产环境显示",
+        }
+      - {
+          label: "Pinned",
+          name: "pinned",
+          widget: "boolean",
+          required: false,
+          default: false,
+          hint: "勾选表示置顶文章",
+        }
+      - {
+          label: "OG Image",
+          name: "ogImage",
+          widget: "string",
+          required: false,
+          hint: "社交媒体分享图片 URL（可选）",
+        }
       - { label: "Body", name: "body", widget: "markdown", required: true }
 
   - name: "notes" # 用于 Notes
@@ -36,11 +91,23 @@ collections:
     create: true
     slug: "{{slug}}"
     extension: md
-    format: frontmatter
-    frontmatter_delimiter: ["---", "---"]
+    format: yaml-frontmatter
     fields:
       - { label: "Title", name: "title", widget: "string", required: true }
-      - { label: "Description", name: "description", widget: "string", required: false, hint: "笔记描述（可选）" }
-      - { label: "Publish Date", name: "publishDate", widget: "datetime", required: true, format: "YYYY-MM-DDTHH:mm:ssZ", date_format: "YYYY-MM-DD", time_format: "HH:mm:ss" }
+      - {
+          label: "Description",
+          name: "description",
+          widget: "string",
+          required: false,
+          hint: "笔记描述（可选）",
+        }
+      - {
+          label: "Publish Date",
+          name: "publishDate",
+          widget: "datetime",
+          required: true,
+          format: "YYYY-MM-DDTHH:mm:ssZ",
+          date_format: "YYYY-MM-DD",
+          time_format: "HH:mm:ss",
+        }
       - { label: "Body", name: "body", widget: "markdown", required: true }
-
