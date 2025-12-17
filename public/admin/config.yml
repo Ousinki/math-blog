@@ -5,8 +5,8 @@ backend:
   base_url: https://math-blog-6hw.pages.dev # 你的网站 URL（用于 OAuth 回调）
   auth_endpoint: /auth # Cloudflare Functions 端點
 
-media_folder: "src/content/post" # 媒体文件存储位置
-public_folder: "/posts" # 公共访问路径
+media_folder: "public/images/posts" # 媒体文件存储在 public 目录，可以直接访问
+public_folder: "/images/posts" # 公共访问路径
 
 # 本地开发时使用（可选）
 # local_backend: true
