@@ -19,15 +19,64 @@
 	<!-- Explicitly link config.yml -->
 	<link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
 	
-	<!-- Debug script: Log all received messages -->
+	<!-- Force authentication handler -->
 	<script is:inline>
-		window.addEventListener("message", (event) => {
-			console.log("Admin window received message:", event.data);
-		});
+		(function() {
+			let authToken = null;
+			
+			// Listen for auth messages
+			window.addEventListener("message", (event) => {
+				console.log("Admin window received message:", event.data);
+				
+				// Try to parse the message
+				let token = null;
+				
+				// Format 1: String "authorization:github:success:{json}"
+				if (typeof event.data === 'string' && event.data.startsWith('authorization:github:success:')) {
+					try {
+						const jsonStr = event.data.replace('authorization:github:success:', '');
+						const data = JSON.parse(jsonStr);
+						token = data.token;
+						console.log("Extracted token from string format:", token);
+					} catch (e) {
+						console.error("Failed to parse auth message:", e);
+					}
+				}
+				
+				// Format 2: Object { type: "authorization", ... }
+				if (typeof event.data === 'object' && event.data.type === 'authorization') {
+					token = event.data.token;
+					console.log("Extracted token from object format:", token);
+				}
+				
+				if (token) {
+					authToken = token;
+					console.log("Auth token received:", token);
+					
+					// Store in localStorage (multiple formats)
+					localStorage.setItem('netlify-cms-user', JSON.stringify({
+						token: token,
+						backendName: 'github'
+					}));
+					
+					localStorage.setItem('decap-cms-user', JSON.stringify({
+						token: token,
+						backendName: 'github'
+					}));
+					
+					// Try to trigger CMS reload
+					setTimeout(() => {
+						console.log("Reloading to apply authentication...");
+						window.location.reload();
+					}, 500);
+				}
+			});
+			
+			console.log("Decap CMS auth handler installed");
+		})();
 	</script>
 
 	<!-- 包含 Decap CMS -->
 	<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
-
