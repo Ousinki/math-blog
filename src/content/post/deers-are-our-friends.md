@@ -4,7 +4,7 @@ description: Deers are our friends. Deers are our friends. Deers are our
   friends. Deers are our friends.
 publishDate: 2025-12-17
 tags: []
-draft: true
+draft: false
 pinned: false
 ---
 This is a text.
