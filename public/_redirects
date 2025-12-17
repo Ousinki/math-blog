@@ -1,0 +1,4 @@
+# Cloudflare Pages 重定向规则
+# 阻止所有 /blog/ 路由，返回 404
+/blog/*  /404  404
+
