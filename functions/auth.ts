@@ -58,31 +58,40 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     <body>
     <script>
       (function() {
-        function receiveMessage(e) {
-          console.log("receiveMessage %o", e);
+        const authData = {
+          token: "${result.access_token}",
+          provider: "github"
+        };
+        
+        // Try different message formats that Decap CMS might expect
+        const messageString = "authorization:github:success:" + JSON.stringify(authData);
+        const messageObject = {
+          type: "authorization",
+          provider: "github", 
+          status: "success",
+          ...authData
+        };
+        
+        function sendMessages() {
+          if (!window.opener) {
+            console.error("No window.opener found!");
+            return;
+          }
           
-          // Send the token to the window that opened this popup
-          window.opener.postMessage(
-            'authorization:github:success:${JSON.stringify({
-              token: result.access_token,
-              provider: "github",
-            })}',
-            e.origin
-          );
+          // Send both formats to be safe
+          window.opener.postMessage(messageString, "*");
+          window.opener.postMessage(messageObject, "*");
+          console.log("Messages sent:", { messageString, messageObject });
         }
-        window.addEventListener("message", receiveMessage, false);
         
-        // Also try sending immediately in case the listener is already ready
-        window.opener.postMessage(
-          'authorization:github:success:${JSON.stringify({
-            token: result.access_token,
-            provider: "github",
-          })}',
-          "${url.origin}"
-        );
+        // Send immediately
+        sendMessages();
         
-        // Close the popup
-        // window.close(); // Optional: let the user see it worked or close automatically
+        // Also listen for a message from parent just in case
+        window.addEventListener("message", (e) => {
+          console.log("Callback received message:", e.data);
+          sendMessages();
+        });
       })();
     </script>
     Authentication successful! You can close this window.
