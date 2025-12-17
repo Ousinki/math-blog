@@ -88,7 +88,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
                 token: result.access_token,
                 provider: "github",
               })}',
-              e.origin
+              "*"
             );
           }
           window.addEventListener("message", receiveMessage, false);
@@ -99,7 +99,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
               token: result.access_token,
               provider: "github",
             })}',
-            "${url.origin}"
+            "*"
           );
         })();
       </script>
