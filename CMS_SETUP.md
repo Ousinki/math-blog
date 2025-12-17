@@ -21,7 +21,7 @@
 2. **填写信息**
    - **Application name**: `Math Blog CMS`（或任意名称）
    - **Homepage URL**: `https://math-blog-6hw.pages.dev`
-   - **Authorization callback URL**: `https://math-blog-6hw.pages.dev/admin`
+   - **Authorization callback URL**: `https://math-blog-6hw.pages.dev/api/callback` ⚠️ 注意：必须是 `/api/callback`
    - 点击 "Register application"
 
 3. **获取 Client ID**
@@ -41,12 +41,28 @@ backend:
   base_url: https://math-blog-6hw.pages.dev  # 你的网站 URL
 ```
 
-### 3. 配置环境变量（可选）
+### 3. 配置 Cloudflare Pages 环境变量（必需）
 
-如果需要更安全的配置，可以在 Cloudflare Pages 设置中添加环境变量：
+在 Cloudflare Pages 项目设置中添加环境变量：
 
-- `GITHUB_CLIENT_ID`: 你的 GitHub OAuth Client ID
-- `GITHUB_CLIENT_SECRET`: 你的 GitHub OAuth Client Secret
+1. **登录 Cloudflare 仪表板**
+   - 进入你的 Pages 项目设置
+   - 找到 "Environment variables" 部分
+
+2. **添加环境变量**
+   - `GITHUB_CLIENT_ID`: 你的 GitHub OAuth Client ID
+   - `GITHUB_CLIENT_SECRET`: 你的 GitHub OAuth Client Secret
+
+   ⚠️ **重要**：这些环境变量是必需的，用于 OAuth 认证流程。
+
+### 4. Cloudflare Functions（已创建）
+
+项目已包含以下 Cloudflare Functions 来处理 OAuth：
+
+- `functions/api/auth.ts` - 处理 OAuth 授权请求
+- `functions/api/callback.ts` - 处理 OAuth 回调
+
+这些文件已经创建，无需额外配置。
 
 ### 4. 测试 CMS
 

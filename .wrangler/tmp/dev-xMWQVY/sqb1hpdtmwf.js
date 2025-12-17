@@ -13391,22 +13391,13 @@ __name(transformRoutingRuleToRegExp, "transformRoutingRuleToRegExp");
 var define_ROUTES_default = {
   version: 1,
   include: [
-    "/_server-islands/*"
+    "/*"
   ],
   exclude: [
-    "/",
     "/_astro/*",
-    "/#",
-    "/blog/*",
     "/icon.svg",
     "/social-card.png",
-    "/notes/*",
-    "/og-image/*",
-    "/rss.xml",
-    "/404",
-    "/about",
-    "/posts/*",
-    "/tags/*"
+    "/blog/*"
   ]
 };
 var routes = define_ROUTES_default;

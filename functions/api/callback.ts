@@ -21,7 +21,9 @@ function renderBody(status: string, content: unknown) {
 		</script>
 	</body>
 	</html>`;
-	return new Blob([html], { type: "text/html;charset=UTF-8" });
+	return new Response(html, {
+		headers: { "content-type": "text/html;charset=UTF-8" },
+	});
 }
 
 export async function onRequest(context: {
@@ -33,10 +35,7 @@ export async function onRequest(context: {
 	const client_secret = env.GITHUB_CLIENT_SECRET;
 
 	if (!client_id || !client_secret) {
-		return new Response(renderBody("error", { error: "OAuth not configured" }), {
-			headers: { "content-type": "text/html;charset=UTF-8" },
-			status: 500,
-		});
+		return renderBody("error", { error: "OAuth not configured" });
 	}
 
 	try {
@@ -44,8 +43,9 @@ export async function onRequest(context: {
 		const code = url.searchParams.get("code");
 
 		if (!code) {
-			return new Response(renderBody("error", { error: "No code provided" }), {
-				headers: { "content-type": "text/html;charset=UTF-8" },
+			const errorResponse = renderBody("error", { error: "No code provided" });
+			return new Response(errorResponse.body, {
+				headers: errorResponse.headers,
 				status: 400,
 			});
 		}
@@ -63,24 +63,15 @@ export async function onRequest(context: {
 		const result = (await response.json()) as { error?: string; access_token?: string };
 
 		if (result.error) {
-			return new Response(renderBody("error", result), {
-				headers: { "content-type": "text/html;charset=UTF-8" },
-				status: 401,
-			});
+			return renderBody("error", result);
 		}
 
 		const token = result.access_token;
 		const provider = "github";
 
-		return new Response(renderBody("success", { token, provider }), {
-			headers: { "content-type": "text/html;charset=UTF-8" },
-			status: 200,
-		});
+		return renderBody("success", { token, provider });
 	} catch (error) {
-		return new Response(renderBody("error", { error: (error as Error).message }), {
-			headers: { "content-type": "text/html;charset=UTF-8" },
-			status: 500,
-		});
+		return renderBody("error", { error: (error as Error).message });
 	}
 }
 
