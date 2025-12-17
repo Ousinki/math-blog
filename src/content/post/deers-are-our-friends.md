@@ -7,9 +7,12 @@ tags: []
 draft: true
 pinned: false
 ---
-
 This is a text.
 
 ![deer](/images/posts/2019-wildlife-mule-deer-on-summit-road.webp "deer")
 
-This pic is a deer.
+This pic is deers.
+
+This also a pic about deer.
+
+![a_deer](/posts/2020_1.webp "a_deer")
