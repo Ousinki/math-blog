@@ -96,6 +96,9 @@ export default defineConfig({
 			exclude: ["@resvg/resvg-js"],
 		},
 		plugins: [tailwind(), rawFonts([".ttf", ".woff"])],
+		ssr: {
+			external: ["@resvg/resvg-js", "sharp"],
+		},
 	},
 	env: {
 		schema: {
