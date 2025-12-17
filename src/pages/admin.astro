@@ -18,6 +18,14 @@
 <body>
 	<!-- Explicitly link config.yml -->
 	<link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+	
+	<!-- Debug script: Log all received messages -->
+	<script is:inline>
+		window.addEventListener("message", (event) => {
+			console.log("Admin window received message:", event.data);
+		});
+	</script>
+
 	<!-- 包含 Decap CMS -->
 	<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
