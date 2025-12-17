@@ -95,6 +95,7 @@ export default defineConfig({
 		optimizeDeps: {
 			exclude: ["@resvg/resvg-js"],
 		},
+		// @ts-ignore - Vite version mismatch between Astro and project dependencies
 		plugins: [tailwind(), rawFonts([".ttf", ".woff"])],
 		ssr: {
 			external: ["@resvg/resvg-js", "sharp"],
