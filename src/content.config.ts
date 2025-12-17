@@ -38,8 +38,7 @@ const post = defineCollection({
 });
 
 const note = defineCollection({
-	// Notes 同樣支援 .mdoc
-	loader: glob({ base: "./src/content/note", pattern: "**/*.{md,mdx,mdoc}" }),
+	loader: glob({ base: "./src/content/note", pattern: "**/*.{md,mdx}" }),
 	schema: baseSchema.extend({
 		description: z.string().optional(),
 		publishDate: z
