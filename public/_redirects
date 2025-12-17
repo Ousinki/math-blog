@@ -2,3 +2,6 @@
 # 阻止所有 /blog/ 路由，返回 404
 /blog/*  /404  404
 
+# CMS OAuth 认证重定向
+/auth  /api/auth  200
+
