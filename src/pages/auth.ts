@@ -57,6 +57,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
         client_id: GITHUB_CLIENT_ID,
         client_secret: GITHUB_CLIENT_SECRET,
         code,
+        redirect_uri: "https://math-blog-6hw.pages.dev/auth", // Add this!
       }),
     });
 
