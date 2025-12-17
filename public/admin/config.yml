@@ -3,7 +3,7 @@ backend:
   repo: Ousinki/math-blog # 你的 GitHub 仓库（格式：用户名/仓库名）
   branch: main # 分支名称
   base_url: https://math-blog-6hw.pages.dev # 你的网站 URL（用于 OAuth 回调）
-  auth_endpoint: https://math-blog-6hw.pages.dev/auth # 明确指定完整认证端点 URL
+  auth_endpoint: /auth # 明确指定完整认证端点 URL
 
 media_folder: "src/content/post" # 媒体文件存储位置
 public_folder: "/posts" # 公共访问路径
