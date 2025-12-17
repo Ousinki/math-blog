@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "include": [
+    "/_server-islands/*",
+    "/auth",
+    "/api/*"
+  ],
+  "exclude": [
+    "/",
+    "/_astro/*",
+    "/#",
+    "/blog/*",
+    "/icon.svg",
+    "/social-card.png",
+    "/admin/*",
+    "/notes/*",
+    "/og-image/*",
+    "/rss.xml",
+    "/404",
+    "/about",
+    "/posts/*",
+    "/tags/*"
+  ]
+}
+
