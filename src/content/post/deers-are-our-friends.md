@@ -15,4 +15,4 @@ This pic is deers.
 
 This also a pic about deer.
 
-![a_deer](/posts/2020_1.webp "a_deer")
+![wooooo](/images/posts/2020_1.webp "wo")
