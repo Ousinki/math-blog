@@ -61,9 +61,15 @@ export const GET: APIRoute = async ({ request, locals }) => {
     });
 
     const result = await response.json() as any;
+    console.log("GitHub Token Exchange Result:", JSON.stringify(result));
 
     if (result.error) {
-      return new Response(JSON.stringify(result), { status: 400 });
+      return new Response(JSON.stringify({
+        error: result.error,
+        error_description: result.error_description,
+        error_uri: result.error_uri,
+        details: "GitHub returned an error during token exchange"
+      }), { status: 400 });
     }
 
     // 3. Return the token to Decap CMS
