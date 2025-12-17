@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import cloudflare from "@astrojs/cloudflare";
 import keystatic from '@keystatic/astro';
+import react from '@astrojs/react';
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@tailwindcss/vite";
@@ -32,6 +33,7 @@ export default defineConfig({
 	},
 	integrations: [
 		keystatic(),
+		react(),
 		expressiveCode(expressiveCodeOptions),
 		icon(),
 		sitemap(),
