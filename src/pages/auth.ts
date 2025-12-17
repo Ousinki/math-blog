@@ -30,7 +30,11 @@ export const GET: APIRoute = async ({ request, locals }) => {
     const redirectUrl = new URL("https://github.com/login/oauth/authorize");
     redirectUrl.searchParams.set("client_id", GITHUB_CLIENT_ID);
     redirectUrl.searchParams.set("scope", "repo,user");
-    redirectUrl.searchParams.set("redirect_uri", url.origin + "/auth"); 
+    // Hardcode the redirect_uri to ensure it matches GitHub settings exactly
+    const callbackUrl = "https://math-blog-6hw.pages.dev/auth";
+    redirectUrl.searchParams.set("redirect_uri", callbackUrl); 
+    
+    console.log(`Initiating OAuth with redirect_uri: ${callbackUrl}`); 
     
     const state = url.searchParams.get("state") || Math.random().toString(36).substring(2);
     redirectUrl.searchParams.set("state", state);
