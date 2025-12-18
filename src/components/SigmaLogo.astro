@@ -1,0 +1,129 @@
+---
+// 3D Isometric Σ (Sigma) Logo with hover effect
+---
+
+<svg
+	aria-hidden="true"
+	class="sigma-logo me-3 h-24 w-24 sm:absolute sm:-start-32 sm:me-0 sm:h-32 sm:w-32"
+	viewBox="-260 -60 520 620"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<title>Math Blog Logo</title>
+	<g id="cubes">
+		<!-- Cubes will be inserted by script -->
+	</g>
+</svg>
+
+<style>
+	.sigma-logo {
+		transition: all 0.3s ease;
+	}
+
+	/* Default gray colors */
+	.sigma-logo {
+		--color-top: #d6d6d6;
+		--color-left: #a0a0a0;
+		--color-right: #bdbdbd;
+	}
+
+	/* Blue colors on hover */
+	.sigma-logo:hover,
+	a:hover .sigma-logo {
+		--color-top: #38bdf8;
+		--color-left: #1d4ed8;
+		--color-right: #93c5fd;
+	}
+</style>
+
+<script is:inline>
+	// Constants
+	const tileW = 44, tileH = 22, tileZ = 22;
+	const originX = 0, originY = 40;
+
+	// Σ pixel map
+	const map = [
+		"########",
+		"########",
+		"###......",
+		".####....",
+		"...###..",
+		".....#",
+		"...###..",
+		".####....",
+		"###......",
+		"#########",
+		"#########",
+	];
+
+	const NS = "http://www.w3.org/2000/svg";
+
+	function poly(points, fillVar) {
+		const p = document.createElementNS(NS, "polygon");
+		p.setAttribute("points", points.map(([x, y]) => `${x},${y}`).join(" "));
+		p.setAttribute("fill", fillVar);
+		p.setAttribute("stroke", "none");
+		p.style.transition = "fill 0.3s ease";
+		return p;
+	}
+
+	function cubeAt(x, y, z = 0) {
+		const sx = originX + (x - y) * (tileW / 2);
+		const sy = originY + (x + y) * (tileH / 2) - z * tileZ;
+
+		const top = [
+			[sx, sy],
+			[sx + tileW / 2, sy + tileH / 2],
+			[sx, sy + tileH],
+			[sx - tileW / 2, sy + tileH / 2],
+		];
+		const left = [
+			[sx - tileW / 2, sy + tileH / 2],
+			[sx, sy + tileH],
+			[sx, sy + tileH + tileZ],
+			[sx - tileW / 2, sy + tileH / 2 + tileZ],
+		];
+		const right = [
+			[sx + tileW / 2, sy + tileH / 2],
+			[sx, sy + tileH],
+			[sx, sy + tileH + tileZ],
+			[sx + tileW / 2, sy + tileH / 2 + tileZ],
+		];
+
+		const g = document.createElementNS(NS, "g");
+		g.appendChild(poly(left, "var(--color-left)"));
+		g.appendChild(poly(right, "var(--color-right)"));
+		g.appendChild(poly(top, "var(--color-top)"));
+		return g;
+	}
+
+	// Collect blocks
+	const blocks = [];
+	for (let y = 0; y < map.length; y++) {
+		for (let x = 0; x < map[y].length; x++) {
+			if (map[y][x] === "#") {
+				blocks.push({ x, y, z: 0 });
+				blocks.push({ x, y, z: 1 }); // Second layer
+			}
+		}
+	}
+
+	// Sort back to front
+	blocks.sort((a, b) => a.x + a.y - (b.x + b.y));
+
+	// Render (run when DOM is ready)
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', renderLogo);
+	} else {
+		renderLogo();
+	}
+
+	function renderLogo() {
+		const logos = document.querySelectorAll(".sigma-logo");
+		logos.forEach((logo) => {
+			const root = logo.querySelector("#cubes");
+			if (root) {
+				for (const b of blocks) root.appendChild(cubeAt(b.x, b.y, b.z));
+			}
+		});
+	}
+</script>
