@@ -172,3 +172,34 @@ Image in the same folder: `src/content/post/markdown-elements/logo.png`
 ## Links
 
 [Content from markdown-it](https://markdown-it.github.io/)
+
+---
+
+
+:::note[this is title]{fold=false}
+这是默认展开的笔记，可以点击折叠
+:::
+
+:::warning{fold=true}
+这是默认折叠的警告框，需要点击展开
+:::
+
+:::plain[测试 plain 类型]
+這個 plain 默認摺疊，且無背景色。
+:::
+
+```md
+:::plain[测试 plain 类型]
+這個 plain 默認摺疊，且無背景色。
+:::
+```
+
+
+`[原文]{註釋}` 這是一段懸浮窗顯示文本，[這是原文]{這是懸浮顯示}，可以爲特定文字添加註釋。
+
+
+[這是多行註釋]{
+  这是第一行
+  这是第二行
+  这是第三行
+}

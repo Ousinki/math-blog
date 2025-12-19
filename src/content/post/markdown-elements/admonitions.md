@@ -133,3 +133,8 @@ To use this feature you just use the "Github" directive:
 ```markdown title="Linking a user"
 ::github{user="withastro"}
 ```
+
+
+:::tip+
+这是一个测试
+:::

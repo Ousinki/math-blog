@@ -1,0 +1,54 @@
+.hover-reveal {
+	@apply relative inline;
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-decoration-color: var(--color-accent);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+
+	.hover-reveal-tooltip {
+		@apply invisible absolute bottom-full left-1/2 z-50 mb-2 w-max -translate-x-1/2 rounded-md bg-zinc-800 px-3 py-2 text-sm text-white opacity-0 shadow-lg transition-all duration-200;
+		max-width: 400px; /* Increase max-width for multiline */
+		/* Use pre-line to collapse whitespace but preserve line breaks */
+		white-space: pre-line;
+		text-align: left;
+		
+		/* Remove leading/trailing empty lines with display trimming */
+		& > span {
+			display: block;
+		}
+
+		&::after {
+			@apply absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-4 border-transparent border-t-zinc-800;
+			content: "";
+		}
+
+		span {
+			@apply block;
+		}
+	}
+
+	
+	/* Show tooltip on hover of parent, tooltip itself, or focus */
+	&:hover .hover-reveal-tooltip,
+	&:focus .hover-reveal-tooltip,
+	.hover-reveal-tooltip:hover {
+		@apply visible opacity-100;
+	}
+
+	/* Mobile: show on tap */
+	@media (hover: none) and (pointer: coarse) {
+		&:active .hover-reveal-tooltip {
+			@apply visible opacity-100;
+		}
+	}
+
+	/* Dark mode */
+	:global(.dark) & .hover-reveal-tooltip {
+		@apply bg-zinc-700;
+
+		&::after {
+			@apply border-t-zinc-700;
+		}
+	}
+}
