@@ -16,5 +16,3 @@ This pic is deers.
 This also a pic about deer.
 
 ![wooooo](/images/posts/2020_1.webp "wo")
-
-<Video src="/images/posts/求差分方程的通解.mp4" />
