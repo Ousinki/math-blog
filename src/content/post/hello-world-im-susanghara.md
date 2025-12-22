@@ -7,7 +7,6 @@ tags: []
 draft: false
 pinned: false
 ---
-
 e owe you an explanation.
 December 17: An important update for readers in the United States.
 
@@ -16,3 +15,5 @@ You deserve an explanation, so please don't skip this 1-minute read. It's Wednes
 It's been 25 years and Wikipedia is still free. It's still created by people, not machines, and we don't run ads or put up paywalls because we're not here to make a profit off your attention. In other words, it's still the internet we were promised.
 
 Whether you remember the early days of Wikipedia or you've grown up in a world with information at your fingertips, if Wikipedia provides you with $2.75 worth of knowledge, donate today. If you are undecided, remember any contribution helps.
+
+<Video src="/posts/求差分方程的通解.mp4" />
