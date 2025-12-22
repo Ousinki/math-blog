@@ -9,10 +9,10 @@ pinned: false
 ---
 This is a text.
 
-![deer](/images/posts/2019-wildlife-mule-deer-on-summit-road.webp "deer")
+![deer](/posts/integral-green-.svg "deer")
 
 This pic is deers.
 
 This also a pic about deer.
 
-![wooooo](/images/posts/2020_1.webp "wo")
+![wooooo](/posts/integral-grey-.svg "wo")
