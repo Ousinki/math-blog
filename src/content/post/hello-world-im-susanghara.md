@@ -16,4 +16,4 @@ It's been 25 years and Wikipedia is still free. It's still created by people, no
 
 Whether you remember the early days of Wikipedia or you've grown up in a world with information at your fingertips, if Wikipedia provides you with $2.75 worth of knowledge, donate today. If you are undecided, remember any contribution helps.
 
-<Video src="/posts/求差分方程的通解.mp4" />
+where are you?
