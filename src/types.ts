@@ -9,6 +9,18 @@ export interface SiteConfig {
 	ogLocale: string;
 	title: string;
 	url: string;
+	giscus?: {
+		enabled: boolean;
+		repo: string;
+		repoId: string;
+		category: string;
+		categoryId: string;
+		mapping: "pathname" | "url" | "title" | "og:title" | "specific" | "number";
+		reactionsEnabled: boolean;
+		emitMetadata: boolean;
+		inputPosition: "top" | "bottom";
+		lang: string;
+	};
 }
 
 export interface PaginationLink {

@@ -1,0 +1,20 @@
+/* Override inline code backticks - hide them */
+:not(pre) > code {
+	/* Default purple color for light mode */
+	color: #7c3aed !important;
+	
+	&::before,
+	&::after {
+		content: "" !important;
+	}
+}
+
+/* Dark mode - bright cyan-blue */
+[data-theme="dark"] :not(pre) > code {
+	color: #67e8f9 !important; /* Tailwind cyan-300 - night theme */
+}
+
+/* Light mode - purple for better contrast */
+[data-theme="light"] :not(pre) > code {
+	color: #7c3aed !important; /* Tailwind violet-600 - day theme */
+}

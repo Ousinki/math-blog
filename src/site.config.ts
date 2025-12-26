@@ -28,6 +28,20 @@ export const siteConfig: SiteConfig = {
 	title: "ΣathLab Journal", // 這裏是網站主標題！
 	// ! Please remember to replace the following site property with your own domain, used in astro.config.ts
 	url: "https://math-blog-6hw.pages.dev/",
+	// Giscus comments configuration
+	// Visit https://giscus.app/ to get your repo and category IDs
+	giscus: {
+		enabled: true,
+		repo: "Ousinki/math-blog",
+		repoId: "R_kgDOQpx8OA",
+		category: "General",
+		categoryId: "DIC_kwDOQpx8OM4C0QBC",
+		mapping: "pathname",
+		reactionsEnabled: true,
+		emitMetadata: false,
+		inputPosition: "top", // 評論輸入框在頂部
+		lang: "zh-CN",
+	},
 };
 
 // Used to generate links in both the Header & Footer.

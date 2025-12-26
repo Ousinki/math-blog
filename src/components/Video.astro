@@ -1,0 +1,13 @@
+---
+interface Props {
+	src: string;
+	type?: string;
+}
+
+const { src, type = "video/mp4" } = Astro.props;
+---
+
+<video controls width="100%" class="rounded-lg shadow-md">
+	<source src={src} type={type} />
+	您的瀏覽器不支持視頻標籤。
+</video>

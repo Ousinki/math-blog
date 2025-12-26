@@ -1,0 +1,191 @@
+---
+title: 如何在文章中添加視頻
+description: 本文介紹如何在 Astro 博客中添加本地視頻和外部視頻（如 Bilibili、YouTube）的完整指南
+publishDate: 2025-12-21
+tags: ["教程", "視頻", "Astro", "MDX"]
+draft: false
+pinned: true
+---
+
+import Video from "../../components/Video.astro";
+import Bilibili from "../../components/Bilibili.astro";
+
+## 概述
+
+在這個博客中，您可以通過兩種方式添加視頻：
+
+1. **本地視頻**：上傳 `.mp4`、`.webm` 等視頻文件到項目中
+2. **外部視頻**：嵌入 Bilibili、YouTube 等平台的視頻
+
+---
+
+## 方法一：添加本地視頻
+
+### 步驟 1：準備視頻文件
+
+將視頻文件（如 `my-video.mp4`）放入 `public/video/` 文件夾：
+
+```bash
+public/
+└── video/
+    └── my-video.mp4
+```
+
+### 步驟 2：在 MDX 文件中使用
+
+確保您的文章文件使用 `.mdx` 擴展名，然後導入 `Video` 組件：
+
+```mdx
+---
+title: 我的文章
+---
+
+import Video from "../../components/Video.astro";
+
+## 視頻演示
+
+<Video src="/video/my-video.mp4" />
+```
+
+### Bilibili 視頻
+
+```html
+<iframe
+	src="//player.bilibili.com/player.html?bvid=BV1QVCwBeEYk&page=1"
+	scrolling="no"
+	border="0"
+	frameborder="no"
+	framespacing="0"
+	allowfullscreen="true"
+	width="100%"
+	height="400"
+	style="border-radius: 8px;"
+></iframe>
+```
+
+---
+
+## 其他視頻平台
+
+### YouTube
+
+```mdx
+<iframe
+	width="100%"
+	height="400"
+	src="https://www.youtube.com/embed/VIDEO_ID"
+	title="YouTube video player"
+	frameborder="0"
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+	allowfullscreen
+	style="border-radius: 8px;"
+></iframe>
+```
+
+將 `VIDEO_ID` 替換為實際的 YouTube 視頻 ID。
+
+---
+
+## 組件參數說明
+
+### Video 組件
+
+| 參數   | 類型   | 必填 | 默認值        | 說明                             |
+| ------ | ------ | ---- | ------------- | -------------------------------- |
+| `src`  | string | ✅   | -             | 視頻文件路徑（相對於 `public/`） |
+| `type` | string | ❌   | `"video/mp4"` | 視頻 MIME 類型                   |
+
+**示例：**
+
+```mdx
+<Video src="/posts/how-to-add-videos/demo.webm" type="video/webm" />
+```
+
+### Bilibili 組件
+
+| 參數   | 類型   | 必填 | 默認值 | 說明                  |
+| ------ | ------ | ---- | ------ | --------------------- |
+| `bvid` | string | ✅   | -      | Bilibili 視頻的 BV 號 |
+| `page` | number | ❌   | `1`    | 視頻分P（如果有多P）  |
+
+**示例：**
+
+```mdx
+<Bilibili bvid="BV1QVCwBeEYk" page="2" />
+```
+
+---
+
+## 最佳實踐
+
+### 1. 視頻文件組織
+
+```
+public/
+└── video/
+    ├── tutorials/
+    │   └── intro.mp4
+    ├── demos/
+    │   └── feature-demo.mp4
+    └── lectures/
+        └── math-lecture.mp4
+```
+
+### 2. 文件大小優化
+
+- 本地視頻建議使用 **H.264** 編碼的 MP4 格式
+- 壓縮視頻以減少加載時間（推薦工具：HandBrake、FFmpeg）
+- 大文件建議上傳到視頻平台而非本地存儲
+
+### 3. 可訪問性
+
+為視頻添加描述性標題：
+
+```mdx
+### 課程視頻：一階微分方程解法
+
+<Video src="/posts/how-to-add-videos/differential-equations.mp4" />
+```
+
+---
+
+## 常見問題
+
+### Q: 為什麼我的視頻不顯示？
+
+**A:** 檢查以下幾點：
+
+1. 視頻文件是否放在 `public/` 文件夾中
+2. 路徑是否以 `/` 開頭（如 `/video/xxx.mp4`）
+3. 是否使用了 `.mdx` 文件格式（如果使用組件）
+4. 導入路徑是否正確（`../../components/Video.astro`）
+
+### Q: 如何添加多個視頻？
+
+**A:** 直接使用多個組件即可：
+
+```mdx
+<Video src="/posts/how-to-add-videos/video1.mp4" />
+<Video src="/posts/how-to-add-videos/video2.mp4" />
+```
+
+### Q: 如何控制視頻尺寸？
+
+**A:** 組件默認為 100% 寬度。如需自定義，可以用 `<div>` 包裹：
+
+```mdx
+<div style="max-width: 600px; margin: 0 auto;">
+	<Video src="/posts/how-to-add-videos/demo.mp4" />
+</div>
+```
+
+---
+
+## 總結
+
+- 使用 **MDX 組件**使代碼更簡潔、可維護
+- 本地視頻適合短小的演示內容
+- 大型視頻建議使用 Bilibili/YouTube 等平台
+- 記得將文章文件後綴改為 `.mdx` 才能使用組件
+
+Happy blogging! 🎥

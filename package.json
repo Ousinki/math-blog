@@ -1,15 +1,19 @@
 {
-	"name": "astro-cactus-blog",
+	"name": "math-blog",
 	"type": "module",
 	"version": "6.11.0",
 	"scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
+		"start-cms": "npx concurrently \"npm run dev\" \"npx decap-server\"",
+		"stop": "pkill -f 'astro dev' || true && pkill -f 'decap-server' || true",
 		"build": "astro build",
 		"preview": "npx wrangler pages dev dist",
 		"check": "astro check && biome check",
 		"lint": "biome check --write",
-		"format": "prettier -w . --cache"
+		"format": "prettier -w . --cache",
+		"detect-unused": "node scripts/detect-unused-resources.mjs",
+		"organize": ".git/hooks/post-merge"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^12.6.12",

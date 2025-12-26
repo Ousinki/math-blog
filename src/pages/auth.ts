@@ -51,7 +51,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       headers: {
         "content-type": "application/json",
         "accept": "application/json",
-        "user-agent": "astro-cactus-blog",
+        "user-agent": "math-blog",
       },
       body: JSON.stringify({
         client_id: GITHUB_CLIENT_ID,

@@ -78,5 +78,85 @@
 
 	<!-- 包含 Decap CMS -->
 	<script src="https://cdn.jsdelivr.net/npm/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+	
+	<!-- 等待CMS加载完成后注册Video组件 -->
+	<script type="module">
+		console.log('📝 Script loaded, waiting for CMS...');
+		
+		let attempts = 0;
+		const maxAttempts = 50;
+		
+		function registerVideo() {
+			attempts++;
+			
+			if (!window.CMS) {
+				console.log(`⏳ Attempt ${attempts}: CMS not ready yet...`);
+				if (attempts < maxAttempts) {
+					setTimeout(registerVideo, 200);
+				} else {
+					console.error('❌ Failed to load CMS after', maxAttempts * 200, 'ms');
+				}
+				return;
+			}
+			
+			if (!window.CMS.registerEditorComponent) {
+				console.log(`⏳ Attempt ${attempts}: registerEditorComponent not available yet...`);
+				if (attempts < maxAttempts) {
+					setTimeout(registerVideo, 200);
+				}
+				return;
+			}
+			
+			try {
+				console.log('🎬 CMS ready! Registering Video component...');
+				
+				window.CMS.registerEditorComponent({
+					id: "video",
+					label: "Video", 
+					fields: [{
+						name: 'src',
+						label: 'Video',
+						widget: 'file',
+						media_folder: '/public/video',
+						allow_multiple: false,
+						hint: '选择视频文件或输入视频URL'
+					}],
+				// 匹配HTML video或Video组件
+				pattern: /<video[\s\S]*?<source\s+src="([^"]+)"[\s\S]*?<\/video>|<Video\s+src="([^"]+)"\s*\/>/,
+				fromBlock(match) {
+					// match[1] 是 HTML video 的 src, match[2] 是 Video 组件的 src
+					return { src: match[1] || match[2] || '' };
+				},
+				toBlock(data) {
+					const src = data.src || '';
+					return `<video controls width="100%" style="border-radius: 8px;">
+  <source src="${src}" type="video/mp4" />
+  您的瀏覽器不支持視頻標籤。
+</video>`;
+				},
+				toPreview(data) {
+					const src = data.src || '';
+					return `<div style="margin:15px 0;padding:12px;background:#f0f0f0;border-radius:6px;">
+						<video controls style="width:100%;max-width:600px;border-radius:4px;">
+							<source src="${src}" type="video/mp4" />
+						</video>
+						<p style="margin:8px 0 0;font-size:11px;color:#666;">视频: ${src}</p>
+					</div>`;
+				}
+				});
+				
+				console.log('✅ Video component registered successfully!');
+				console.log('💡 Now click the + button in Body editor');
+				console.log('📌 You should see: Choose a video / Insert from URL');
+				
+			} catch (error) {
+				console.error('❌ Error registering Video component:', error);
+				console.error('Error details:', error.message, error.stack);
+			}
+		}
+		
+		// 开始注册
+		registerVideo();
+	</script>
 </body>
 </html>
