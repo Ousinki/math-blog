@@ -31,9 +31,9 @@
 			--color-global-bg: oklch(23.64% 0.0045 248);
 			--color-global-text: oklch(83.54% 0 264);
 			--color-link: oklch(70.44% 0.1133 349);
-			--color-accent: #0066CC;
+			--color-accent: #0066cc;
 			--color-accent-2: oklch(94.66% 0 0);
-			--color-quote: #0066CC;
+			--color-quote: #0066cc;
 		}
 	}
 
@@ -63,6 +63,7 @@
 	@import "./components/github-card.css";
 	@import "./components/hover-reveal.css";
 	@import "./components/keyboard-help.css";
+	@import "./components/latex-copy.css";
 
 	.cactus-link {
 		@apply hover:decoration-link underline underline-offset-2 hover:decoration-2;

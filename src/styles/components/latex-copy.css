@@ -1,0 +1,45 @@
+/* LaTeX Copy-to-Clipboard Functionality */
+
+/* Make math formulas clickable with pointer cursor */
+.katex,
+.katex-display {
+	cursor: pointer;
+	transition: opacity 0.2s ease;
+	position: relative;
+}
+
+.katex:hover,
+.katex-display:hover {
+	opacity: 0.8;
+}
+
+/* Success feedback animation */
+@keyframes latex-copy-success {
+	0% {
+		background-color: rgba(43, 188, 138, 0.2);
+	}
+	100% {
+		background-color: transparent;
+	}
+}
+
+.katex.copied,
+.katex-display.copied {
+	animation: latex-copy-success 0.6s ease;
+}
+
+/* Optional: Add a subtle indicator on hover - only for display formulas */
+.katex-display::after {
+	content: "📋";
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	font-size: 0.8em;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	pointer-events: none;
+}
+
+.katex-display:hover::after {
+	opacity: 0.5;
+}
