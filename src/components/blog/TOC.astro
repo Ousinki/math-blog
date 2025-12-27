@@ -14,9 +14,125 @@ const toc = generateToc(headings);
 
 <details open class="lg:sticky lg:top-12 lg:order-2 lg:-me-32 lg:basis-64">
 	<summary class="title hover:marker:text-accent cursor-pointer text-lg">Table of Contents</summary>
-	<nav class="ms-4 lg:w-full">
+	<nav class="ms-4 lg:w-full" id="table-of-contents">
 		<ol class="mt-4">
 			{toc.map((heading) => <TOCHeading heading={heading} />)}
 		</ol>
 	</nav>
 </details>
+
+<script>
+	function initTocActiveTracking() {
+		const toc = document.getElementById("table-of-contents");
+		if (!toc) return;
+
+		const tocLinks = toc.querySelectorAll('a[href^="#"]');
+		const headingIds: string[] = [];
+		tocLinks.forEach((link) => {
+			const href = link.getAttribute("href");
+			if (href) {
+				headingIds.push(href.substring(1));
+			}
+		});
+
+		if (headingIds.length === 0) return;
+
+		let currentActiveId: string = headingIds[0]!;
+
+		function updateActiveLink(id: string) {
+			currentActiveId = id;
+			tocLinks.forEach((link) => {
+				link.classList.remove("text-accent", "font-semibold");
+			});
+			const activeLink = toc!.querySelector(`a[href="#${id}"]`);
+			if (activeLink) {
+				activeLink.classList.add("text-accent", "font-semibold");
+			}
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					const id = entry.target.getAttribute("id");
+					if (!id) continue;
+					if (entry.isIntersecting) {
+						updateActiveLink(id);
+						break;
+					}
+				}
+			},
+			{
+				rootMargin: "-20% 0px -70%",
+				threshold: 0,
+			}
+		);
+
+		headingIds.forEach((id) => {
+			const heading = document.getElementById(id);
+			if (heading) {
+				observer.observe(heading);
+			}
+		});
+
+		updateActiveLink(headingIds[0]!);
+
+		let ticking = false;
+		window.addEventListener("scroll", () => {
+			if (!ticking) {
+				requestAnimationFrame(() => {
+					let closestId: string | undefined = undefined;
+					let closestDistance = Infinity;
+
+					for (const id of headingIds) {
+						const heading = document.getElementById(id);
+						if (!heading) continue;
+						const rect = heading.getBoundingClientRect();
+						if (rect.top <= 100 && rect.top > -heading.offsetHeight) {
+							if (Math.abs(rect.top) < closestDistance) {
+								closestDistance = Math.abs(rect.top);
+								closestId = id;
+							}
+						}
+					}
+
+					if (!closestId) {
+						for (const id of headingIds) {
+							const heading = document.getElementById(id);
+							if (!heading) continue;
+							const rect = heading.getBoundingClientRect();
+							if (rect.top > 0 && rect.top < window.innerHeight) {
+								closestId = id;
+								break;
+							}
+						}
+					}
+
+					if (!closestId) {
+						const scrollTop = window.scrollY;
+						const scrollHeight = document.documentElement.scrollHeight;
+						const clientHeight = window.innerHeight;
+						if (scrollTop < 100) {
+							closestId = headingIds[0];
+						} else if (scrollTop + clientHeight >= scrollHeight - 100) {
+							closestId = headingIds[headingIds.length - 1];
+						}
+					}
+
+					if (closestId && closestId !== currentActiveId) {
+						updateActiveLink(closestId);
+					}
+					ticking = false;
+				});
+				ticking = true;
+			}
+		});
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initTocActiveTracking);
+	} else {
+		initTocActiveTracking();
+	}
+
+	document.addEventListener("astro:page-load", initTocActiveTracking);
+</script>

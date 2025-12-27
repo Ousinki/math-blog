@@ -1,14 +1,14 @@
 .keyboard-help-panel {
-	@apply fixed inset-x-0 bottom-0 z-[100] transform translate-y-full transition-transform duration-300 ease-in-out;
-	
+	@apply fixed inset-x-0 bottom-0 z-[100] translate-y-full transform transition-transform duration-300 ease-in-out;
+
 	&.visible {
 		@apply translate-y-0;
 	}
-	
+
 	.keyboard-help-content {
 		@apply mx-auto max-w-2xl rounded-t-2xl bg-zinc-900/95 px-6 py-6;
 		/* Premium layered shadows */
-		box-shadow: 
+		box-shadow:
 			0 -4px 6px -1px rgba(0, 0, 0, 0.1),
 			0 -2px 4px -1px rgba(0, 0, 0, 0.06),
 			0 -20px 50px -12px rgba(0, 0, 0, 0.25);
@@ -17,71 +17,94 @@
 		/* Backdrop blur for glass effect */
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
-		
+
 		h3 {
 			@apply mb-4 text-center text-xl font-bold text-white;
 		}
-		
+
 		.keyboard-shortcuts {
 			@apply grid grid-cols-1 gap-3 md:grid-cols-3;
 		}
-		
+
 		.shortcut-item {
 			@apply flex items-center justify-between rounded-lg bg-zinc-800 px-4 py-3;
-			
+
 			kbd {
 				@apply inline-block rounded bg-zinc-700 px-3 py-1 font-mono text-sm font-semibold text-white shadow-md;
 				border: 1px solid var(--color-accent);
 				min-width: 3rem;
 				text-align: center;
 			}
-			
+
 			span {
 				@apply ml-3 flex-1 text-sm text-zinc-300;
 			}
 		}
-		
+
 		.help-hint {
 			@apply mt-4 text-center text-xs text-zinc-500;
 		}
 	}
-	
+
 	/* Dark mode (already dark by default) */
 	:global(.dark) & .keyboard-help-content {
 		@apply bg-zinc-800;
-		
+
 		.shortcut-item {
 			@apply bg-zinc-700;
-			
+
 			kbd {
 				@apply bg-zinc-600;
 			}
 		}
 	}
-	
+
 	/* Light mode */
 	:global(html:not(.dark)) & .keyboard-help-content {
 		@apply bg-white;
 		border-top-color: var(--color-accent);
-		
+
 		h3 {
 			@apply text-zinc-900;
 		}
-		
+
 		.shortcut-item {
 			@apply bg-zinc-100;
-			
+
 			kbd {
 				@apply bg-zinc-200 text-zinc-900;
 			}
-			
+
 			span {
 				@apply text-zinc-700;
 			}
 		}
-		
+
 		.help-hint {
 			@apply text-zinc-500;
 		}
+	}
+}
+
+/* Animations for copy notification */
+@keyframes slideInRight {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideOutRight {
+	from {
+		transform: translateX(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateX(100%);
+		opacity: 0;
 	}
 }

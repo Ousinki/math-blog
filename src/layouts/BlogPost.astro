@@ -1,4 +1,6 @@
 ---
+import fs from "node:fs";
+import path from "node:path";
 import { type CollectionEntry, render } from "astro:content";
 
 import Masthead from "@/components/blog/Masthead.astro";
@@ -18,6 +20,15 @@ const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
 const { headings, remarkPluginFrontmatter } = await render(post);
 const readingTime: string = remarkPluginFrontmatter.readingTime;
+
+// Read MDX source file content
+const mdxFilePath = path.join(process.cwd(), "src", "content", "post", `${post.id}.mdx`);
+let mdxSource = "";
+try {
+	mdxSource = fs.readFileSync(mdxFilePath, "utf-8");
+} catch (err) {
+	console.warn(`Could not read MDX source for ${post.id}:`, err);
+}
 ---
 
 <BaseLayout
@@ -28,7 +39,7 @@ const readingTime: string = remarkPluginFrontmatter.readingTime;
 		title,
 	}}
 >
-	<article class="grow break-words" data-pagefind-body>
+	<article class="grow break-words" data-pagefind-body data-mdx-source={mdxSource}>
 		<div id="blog-hero" class="mb-12"><Masthead content={post} readingTime={readingTime} /></div>
 		<div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
 			{!!headings.length && <TOC headings={headings} />}

@@ -2,6 +2,7 @@
  * Vim-style keyboard navigation
  * gg - scroll to top
  * G - scroll to bottom
+ * p - copy article source code
  * Space - toggle keyboard shortcuts help
  */
 
@@ -23,6 +24,85 @@ function scrollToBottom() {
 	});
 }
 
+async function copyArticleSource() {
+	// Get the article element
+	const article = document.querySelector('article[data-pagefind-body]');
+	
+	if (!article) {
+		console.warn('Article element not found');
+		return;
+	}
+
+	// Get MDX source code from data attribute
+	const mdxSource = article.getAttribute('data-mdx-source');
+	
+	if (!mdxSource) {
+		console.warn('MDX source not found');
+		return;
+	}
+
+	try {
+		// Copy to clipboard
+		await navigator.clipboard.writeText(mdxSource);
+		
+		// Show success feedback
+		showCopyFeedback();
+	} catch (err) {
+		// Fallback for older browsers
+		fallbackCopyToClipboard(mdxSource);
+	}
+}
+
+function showCopyFeedback() {
+	// Create a temporary notification
+	const notification = document.createElement('div');
+	notification.textContent = '已複製 MDX 源代碼 ✓';
+	notification.style.cssText = `
+		position: fixed;
+		top: 20px;
+		right: 20px;
+		background: rgba(43, 188, 138, 0.9);
+		color: white;
+		padding: 12px 24px;
+		border-radius: 8px;
+		font-size: 14px;
+		font-weight: 500;
+		z-index: 10000;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		animation: slideInRight 0.3s ease;
+	`;
+	
+	document.body.appendChild(notification);
+	
+	// Remove after 2 seconds
+	setTimeout(() => {
+		notification.style.animation = 'slideOutRight 0.3s ease';
+		setTimeout(() => {
+			document.body.removeChild(notification);
+		}, 300);
+	}, 2000);
+}
+
+function fallbackCopyToClipboard(text: string) {
+	const textArea = document.createElement('textarea');
+	textArea.value = text;
+	textArea.style.position = 'fixed';
+	textArea.style.left = '-999999px';
+	document.body.appendChild(textArea);
+	textArea.select();
+
+	try {
+		const successful = document.execCommand('copy');
+		if (successful) {
+			showCopyFeedback();
+		}
+	} catch (err) {
+		console.error('Failed to copy article source:', err);
+	}
+
+	document.body.removeChild(textArea);
+}
+
 function createHelpPanel() {
 	const panel = document.createElement("div");
 	panel.id = "keyboard-help-panel";
@@ -38,6 +118,10 @@ function createHelpPanel() {
 				<div class="shortcut-item">
 					<kbd>G</kbd>
 					<span>跳到底部</span>
+				</div>
+				<div class="shortcut-item">
+					<kbd>p</kbd>
+					<span>複製文章源代碼</span>
 				</div>
 				<div class="shortcut-item">
 					<kbd>Space</kbd>
@@ -99,6 +183,9 @@ function handleKeyPress(e: KeyboardEvent) {
 		keyBuffer = "";
 	} else if (keyBuffer === "G") {
 		scrollToBottom();
+		keyBuffer = "";
+	} else if (keyBuffer === "p") {
+		copyArticleSource();
 		keyBuffer = "";
 	} else if (keyBuffer.length >= 2) {
 		// Reset buffer if no match and already 2+ chars
