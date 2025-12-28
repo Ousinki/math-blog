@@ -49,28 +49,55 @@ const twikoo = siteConfig.twikoo;
 						const envId = scriptTag?.getAttribute("data-env-id");
 						const region = scriptTag?.getAttribute("data-region");
 
-						// Load Twikoo script
-						const script = document.createElement("script");
-						script.src = "https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js";
-						script.onload = function () {
-							// Initialize Twikoo
-							const config = {
-								envId: envId,
-								el: "#twikoo-comments",
+						// Load KaTeX CSS first
+					const katexCSS = document.createElement("link");
+					katexCSS.rel = "stylesheet";
+					katexCSS.href = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css";
+					document.head.appendChild(katexCSS);
+
+					// Load KaTeX JS
+					const katexScript = document.createElement("script");
+					katexScript.src = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js";
+					katexScript.onload = function() {
+						// Load KaTeX auto-render extension
+						const autoRenderScript = document.createElement("script");
+						autoRenderScript.src = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js";
+						autoRenderScript.onload = function() {
+							// Load Twikoo script after KaTeX
+							const script = document.createElement("script");
+							script.src = "https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js";
+							script.onload = function () {
+								// Initialize Twikoo with KaTeX config
+								const config = {
+									envId: envId,
+									el: "#twikoo-comments",
+									katex: {
+										delimiters: [
+											{ left: "$$", right: "$$", display: true },
+											{ left: "$", right: "$", display: false },
+											{ left: "\\(", right: "\\)", display: false },
+											{ left: "\\[", right: "\\]", display: true }
+										],
+										throwOnError: false
+									}
+								};
+								
+								// Add region if specified
+								if (region) {
+									config.region = region;
+								}
+								
+								window.twikoo.init(config);
+								
+								// Setup theme observer
+								setupThemeObserver();
 							};
-							
-							// Add region if specified
-							if (region) {
-								config.region = region;
-							}
-							
-							window.twikoo.init(config);
-							
-							// Setup theme observer
-							setupThemeObserver();
+							document.head.appendChild(script);
 						};
-						document.head.appendChild(script);
-					}
+					document.head.appendChild(autoRenderScript);
+				};
+				document.head.appendChild(katexScript);
+				}
 
 					function setupThemeObserver() {
 						function updateTwikooTheme() {
