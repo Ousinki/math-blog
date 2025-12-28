@@ -175,4 +175,25 @@ const twikoo = siteConfig.twikoo;
 		display: flex;
 		align-items: flex-start;
 	}
+	
+	/* Hide input labels and make inputs more compact */
+	.tk-row .tk-col .tk-input {
+		flex: 1;
+	}
+	
+	/* Hide the label text before input */
+	.tk-row .tk-col label {
+		display: none;
+	}
+	
+	/* Make input row more compact */
+	.tk-row {
+		gap: 8px;
+	}
+	
+	/* Style the input fields with placeholder-style labels */
+	.tk-input::placeholder {
+		color: #9ca3af;
+		opacity: 1;
+	}
 </style>
