@@ -91,6 +91,11 @@ const twikoo = siteConfig.twikoo;
 								
 								// Setup theme observer
 								setupThemeObserver();
+								
+								// Customize input fields after Twikoo loads
+								setTimeout(function() {
+									customizeInputFields();
+								}, 500);
 							};
 							document.head.appendChild(script);
 						};
@@ -126,6 +131,32 @@ const twikoo = siteConfig.twikoo;
 
 						// Initial theme setup
 						updateTwikooTheme();
+					}
+					
+				function customizeInputFields() {
+						// Find and customize input fields using actual Twikoo HTML structure
+						const nickInput = document.querySelector('input.el-input__inner[name="nick"]');
+						const mailInput = document.querySelector('input.el-input__inner[name="mail"]');
+						const linkInput = document.querySelector('input.el-input__inner[name="link"]');
+						
+						if (nickInput) {
+							nickInput.placeholder = '昵称（必填）';
+							// Hide the prepend label
+							const nickLabel = nickInput.closest('.el-input-group')?.querySelector('.el-input-group__prepend');
+							if (nickLabel) nickLabel.style.display = 'none';
+						}
+						
+						if (mailInput) {
+							mailInput.placeholder = '邮箱（可选）';
+							const mailLabel = mailInput.closest('.el-input-group')?.querySelector('.el-input-group__prepend');
+							if (mailLabel) mailLabel.style.display = 'none';
+						}
+						
+						if (linkInput) {
+							linkInput.placeholder = '网站（可选）';
+							const linkLabel = linkInput.closest('.el-input-group')?.querySelector('.el-input-group__prepend');
+							if (linkLabel) linkLabel.style.display = 'none';
+						}
 					}
 
 					// Load comments when button is clicked
