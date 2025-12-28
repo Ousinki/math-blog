@@ -32,4 +32,4 @@ jobs:
           REMOTE_USER: root
           SOURCE: "dist/"
           TARGET: "/www/wwwroot/blog/dist/"
-          ARGS: "-avz --delete"
+          ARGS: "-avz --delete --exclude='.user.ini'"
