@@ -1,6 +1,7 @@
 /**
  * LaTeX Copy-to-Clipboard Functionality
- * Allows users to click on math formulas to copy their LaTeX source code
+ * 1. Click on math formula to copy LaTeX source
+ * 2. Select text containing math formulas and copy - formulas are converted to LaTeX
  */
 
 function initLatexCopy() {
@@ -36,6 +37,55 @@ function initLatexCopy() {
 			}
 		});
 	});
+
+	// 監聽 copy 事件，自動將選中的 KaTeX 公式轉換為 LaTeX
+	document.addEventListener("copy", handleCopyWithLatex);
+}
+
+/**
+ * Handle copy event - convert KaTeX formulas to LaTeX source
+ */
+function handleCopyWithLatex(event: ClipboardEvent) {
+	const selection = window.getSelection();
+	if (!selection || selection.isCollapsed) return;
+
+	const range = selection.getRangeAt(0);
+	const container = document.createElement("div");
+	container.appendChild(range.cloneContents());
+
+	// 檢查是否包含 KaTeX 元素
+	const katexElements = container.querySelectorAll(".katex");
+	if (katexElements.length === 0) return; // 沒有公式，使用默認複製行為
+
+	// 替換所有 KaTeX 元素為其 LaTeX 源碼
+	katexElements.forEach((katex) => {
+		const annotation = katex.querySelector('annotation[encoding="application/x-tex"]');
+		if (annotation) {
+			const latex = annotation.textContent || "";
+			// 判斷是行內公式還是塊級公式
+			const isBlock = katex.closest(".katex-display") !== null;
+			const replacement = document.createTextNode(isBlock ? `$$${latex}$$` : `$${latex}$`);
+			katex.parentNode?.replaceChild(replacement, katex);
+		}
+	});
+
+	// 同時處理塊級公式容器
+	const displayElements = container.querySelectorAll(".katex-display");
+	displayElements.forEach((display) => {
+		const annotation = display.querySelector('annotation[encoding="application/x-tex"]');
+		if (annotation) {
+			const latex = annotation.textContent || "";
+			const replacement = document.createTextNode(`$$${latex}$$`);
+			display.parentNode?.replaceChild(replacement, display);
+		}
+	});
+
+	// 獲取轉換後的純文本
+	const convertedText = container.textContent || "";
+
+	// 阻止默認複製，使用我們轉換後的文本
+	event.preventDefault();
+	event.clipboardData?.setData("text/plain", convertedText);
 }
 
 /**

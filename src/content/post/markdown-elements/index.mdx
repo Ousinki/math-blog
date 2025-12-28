@@ -1,0 +1,242 @@
+---
+title: "Markdown 功能指南"
+description: "展示博客支持的所有 Markdown 功能，包括基礎語法、Admonitions、可折疊框和視頻嵌入"
+publishDate: "22 Feb 2022"
+updatedDate: 28 Dec 2025
+tags: ["markdown", "教程", "視頻", "admonitions"]
+pinned: true
+draft: true
+---
+
+import Video from "../../../components/Video.astro";
+import Bilibili from "../../../components/Bilibili.astro";
+
+本文展示博客支持的所有 Markdown 功能。
+
+---
+
+## 基礎 Markdown
+
+### 標題層級
+
+## H2 標題
+### H3 標題
+#### H4 標題
+##### H5 標題
+###### H6 標題
+
+### 強調
+
+**粗體文字** / _斜體文字_ / ~~刪除線~~
+
+### 引用
+
+> 引用可以嵌套...
+>
+> > ...通過使用多個 `>` 符號...
+
+### 列表
+
+- 無序列表項 1
+  - 子項 1
+  - 子項 2
+- 無序列表項 2
+
+1. 有序列表項 1
+2. 有序列表項 2
+
+### 代碼
+
+行內 `code`
+
+```js title="example.js"
+function hello() {
+  console.log("Hello, World!");
+}
+```
+
+```js title="line-markers.js" del={2} ins={3-4} {6}
+function demo() {
+  console.log("this line is marked as deleted");
+  // This line and the next one are marked as inserted
+  console.log("this is the second inserted line");
+
+  return "this line uses the neutral default marker type";
+}
+```
+
+### 表格
+
+| 功能 | 說明 |
+| --- | --- |
+| Admonitions | 提示框 |
+| 可折疊 | 隱藏內容 |
+| 視頻 | 嵌入視頻 |
+
+### 腳註
+
+這是一個腳註示例[^1]。
+
+[^1]: 這是腳註內容。
+
+### 圖片
+
+<div style="max-width: 300px;">
+  ![Astro theme cactus logo](./logo.png)
+</div>
+
+### 懸浮註釋
+
+在 MD 文件中使用 `[原文]{註釋}` 語法可以為[文字]\{註釋}添加註釋。但是在 MDX 文件，這個語法會被 JSX 解析器先處理，所以需要使用轉義符： `[原文]\{註釋}` 。  
+
+
+---
+
+## Admonitions（提示框）
+
+使用 `:::type` 語法創建提示框：
+
+```md
+:::note
+這是一個 note 提示框
+:::
+```
+
+### 支持的類型
+
+:::note
+**Note** - 用於一般信息
+:::
+
+:::tip
+**Tip** - 用於提示和建議
+:::
+
+:::important
+**Important** - 用於重要信息
+:::
+
+:::caution
+**Caution** - 用於需要注意的事項
+:::
+
+:::warning
+**Warning** - 用於警告信息
+:::
+
+### 自定義標題
+
+```md
+:::note[自定義標題]
+內容...
+:::
+```
+
+:::note[這是自定義標題]
+這是帶有自定義標題的提示框
+:::
+
+---
+
+## 可折疊的 Admonitions
+
+使用 `{fold}` 或 `{fold=true}` 創建可折疊的提示框：
+
+### 默認折疊
+
+```md
+:::warning{fold}
+這是默認折疊的內容
+:::
+```
+
+:::warning{fold}
+這是默認折疊的內容，點擊標題展開
+:::
+
+### 默認展開（可折疊）
+
+```md
+:::note{fold=false}
+這是默認展開但可折疊的內容
+:::
+```
+
+:::note{fold=false}
+這是默認展開但可折疊的內容
+:::
+
+### 語法總結
+
+| 語法 | 效果 |
+|------|------|
+| `{fold}` | 默認折疊 |
+| `{fold=true}` | 默認折疊 |
+| `{fold=false}` | 默認展開（可折疊）|
+| 無 `fold` | 不可折疊 |
+
+---
+
+## 視頻嵌入
+
+### 本地視頻
+
+將視頻放入 `public/video/` 目錄，使用 Video 組件：
+
+```mdx
+import Video from "../../../components/Video.astro";
+
+<Video src="/video/my-video.mp4" />
+```
+
+### Bilibili 視頻
+
+```html
+<iframe
+  src="//player.bilibili.com/player.html?bvid=BV1QVCwBeEYk&page=1"
+  scrolling="no"
+  border="0"
+  frameborder="no"
+  framespacing="0"
+  allowfullscreen="true"
+  width="100%"
+  height="400"
+  style="border-radius: 8px;"
+></iframe>
+```
+
+### YouTube 視頻
+
+```html
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="YouTube video player"
+  frameborder="0"
+  allowfullscreen
+  style="border-radius: 8px;"
+></iframe>
+```
+
+### Video 組件參數
+
+| 參數 | 類型 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| `src` | string | ✅ | 視頻路徑（相對於 `public/`）|
+| `type` | string | ❌ | 視頻 MIME 類型（默認 `video/mp4`）|
+
+---
+
+## GitHub Repository Cards
+
+::github{repo="chrismwilliams/astro-theme-cactus"}
+
+```md
+::github{repo="用戶名/倉庫名"}
+::github{user="用戶名"}
+```
+
+鏈接項目即爲本博客網站使用的主題。
+
+

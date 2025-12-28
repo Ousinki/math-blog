@@ -2,7 +2,7 @@
  * Vim-style keyboard navigation
  * gg - scroll to top
  * G - scroll to bottom
- * p - copy article source code
+ * r - toggle source code viewer
  * Space - toggle keyboard shortcuts help
  */
 
@@ -120,8 +120,8 @@ function createHelpPanel() {
 					<span>跳到底部</span>
 				</div>
 				<div class="shortcut-item">
-					<kbd>p</kbd>
-					<span>複製文章源代碼</span>
+					<kbd>r</kbd>
+					<span>查看 MDX 源代碼</span>
 				</div>
 				<div class="shortcut-item">
 					<kbd>Space</kbd>
@@ -184,9 +184,7 @@ function handleKeyPress(e: KeyboardEvent) {
 	} else if (keyBuffer === "G") {
 		scrollToBottom();
 		keyBuffer = "";
-	} else if (keyBuffer === "p") {
-		copyArticleSource();
-		keyBuffer = "";
+	// p key removed - now using r key for source viewer
 	} else if (keyBuffer.length >= 2) {
 		// Reset buffer if no match and already 2+ chars
 		keyBuffer = e.key;

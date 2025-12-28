@@ -95,3 +95,164 @@ try {
 <script>
 	import "@/scripts/latex-copy.ts";
 </script>
+
+<!-- 全屏左右對照視圖 -->
+<div id="compare-view" class="fixed inset-0 z-[200] hidden bg-zinc-100 dark:bg-zinc-900">
+	<!-- 頂部工具欄 -->
+	<div class="flex h-12 items-center justify-between bg-zinc-200 px-4 dark:bg-zinc-800">
+		<h2 class="text-lg font-bold text-zinc-700 dark:text-zinc-200">左右對照視圖</h2>
+		<div class="flex items-center gap-3">
+			<label
+				class="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-zinc-300"
+			>
+				<input type="checkbox" id="sync-scroll-toggle" checked class="h-4 w-4 accent-green-600" />
+				同步滾動
+			</label>
+			<button
+				id="copy-source-btn"
+				class="rounded bg-green-600 px-3 py-1.5 text-sm text-white hover:bg-green-700"
+			>
+				複製源代碼
+			</button>
+			<button
+				id="close-compare-btn"
+				class="rounded bg-zinc-500 px-3 py-1.5 text-sm text-white hover:bg-zinc-600"
+			>
+				關閉 (R)
+			</button>
+		</div>
+	</div>
+
+	<!-- 左右分欄 -->
+	<div class="flex h-[calc(100vh-3rem)]">
+		<!-- 左側：渲染內容 -->
+		<div
+			id="left-panel"
+			class="w-1/2 overflow-auto border-r border-zinc-300 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-800"
+		>
+			<div id="rendered-content" class="prose prose-sm dark:prose-invert max-w-none"></div>
+		</div>
+
+		<!-- 右側：源代碼 -->
+		<div id="right-panel" class="w-1/2 overflow-auto bg-zinc-900 p-4">
+			<pre id="source-content" class="text-sm leading-relaxed whitespace-pre-wrap text-zinc-100">
+			</pre>
+		</div>
+	</div>
+</div>
+
+<script>
+	const article = document.querySelector("[data-mdx-source]") as HTMLElement;
+	const compareView = document.getElementById("compare-view") as HTMLDivElement;
+	const renderedContent = document.getElementById("rendered-content") as HTMLDivElement;
+	const sourceContent = document.getElementById("source-content") as HTMLPreElement;
+	const closeBtn = document.getElementById("close-compare-btn") as HTMLButtonElement;
+	const copyBtn = document.getElementById("copy-source-btn") as HTMLButtonElement;
+	const leftPanel = document.getElementById("left-panel") as HTMLDivElement;
+	const rightPanel = document.getElementById("right-panel") as HTMLDivElement;
+	const syncToggle = document.getElementById("sync-scroll-toggle") as HTMLInputElement;
+
+	if (article && compareView && renderedContent && sourceContent && leftPanel && rightPanel) {
+		const mdxSource = article.dataset.mdxSource || "";
+
+		let isCompareMode = false;
+		let isSyncing = false;
+		let syncEnabled = true;
+		let lastScrollTime = 0;
+		const THROTTLE_MS = 16; // ~60fps
+
+		// 節流的同步滾動功能
+		function syncScroll(source: HTMLElement, target: HTMLElement) {
+			if (!syncEnabled || isSyncing) return;
+
+			const now = Date.now();
+			if (now - lastScrollTime < THROTTLE_MS) return;
+			lastScrollTime = now;
+
+			isSyncing = true;
+
+			const sourceMaxScroll = source.scrollHeight - source.clientHeight;
+			const targetMaxScroll = target.scrollHeight - target.clientHeight;
+
+			if (sourceMaxScroll > 0 && targetMaxScroll > 0) {
+				const ratio = source.scrollTop / sourceMaxScroll;
+				target.scrollTop = ratio * targetMaxScroll;
+			}
+
+			requestAnimationFrame(() => {
+				isSyncing = false;
+			});
+		}
+
+		leftPanel.addEventListener("scroll", () => syncScroll(leftPanel, rightPanel));
+		rightPanel.addEventListener("scroll", () => syncScroll(rightPanel, leftPanel));
+
+		// 同步開關
+		syncToggle?.addEventListener("change", () => {
+			syncEnabled = syncToggle.checked;
+		});
+
+		function toggleCompareMode() {
+			isCompareMode = !isCompareMode;
+
+			if (isCompareMode) {
+				// 複製整個文章內容（包括標題和日期）
+				const blogHero = article.querySelector("#blog-hero");
+				const proseContent = article.querySelector(".prose");
+
+				let contentHtml = "";
+				if (blogHero) {
+					contentHtml += blogHero.outerHTML;
+				}
+				if (proseContent) {
+					contentHtml += proseContent.outerHTML;
+				}
+				renderedContent.innerHTML = contentHtml;
+				sourceContent.textContent = mdxSource;
+				compareView.classList.remove("hidden");
+				document.body.style.overflow = "hidden";
+				// 重置滾動位置
+				leftPanel.scrollTop = 0;
+				rightPanel.scrollTop = 0;
+			} else {
+				compareView.classList.add("hidden");
+				document.body.style.overflow = "";
+			}
+		}
+
+		async function copySource() {
+			try {
+				await navigator.clipboard.writeText(mdxSource);
+				if (copyBtn) {
+					const originalText = copyBtn.textContent;
+					copyBtn.textContent = "已複製 ✓";
+					copyBtn.classList.remove("bg-green-600", "hover:bg-green-700");
+					copyBtn.classList.add("bg-green-700");
+					setTimeout(() => {
+						copyBtn.textContent = originalText;
+						copyBtn.classList.add("bg-green-600", "hover:bg-green-700");
+						copyBtn.classList.remove("bg-green-700");
+					}, 2000);
+				}
+			} catch (err) {
+				console.error("Failed to copy:", err);
+			}
+		}
+
+		// 按 R 鍵切換對照模式
+		document.addEventListener("keydown", (e) => {
+			if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+				return;
+			}
+
+			if (e.key.toLowerCase() === "r") {
+				toggleCompareMode();
+			}
+		});
+
+		closeBtn?.addEventListener("click", () => {
+			if (isCompareMode) toggleCompareMode();
+		});
+		copyBtn?.addEventListener("click", copySource);
+	}
+</script>
