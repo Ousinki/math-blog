@@ -21,6 +21,11 @@ export interface SiteConfig {
 		inputPosition: "top" | "bottom";
 		lang: string;
 	};
+	twikoo?: {
+		enabled: boolean;
+		envId: string;
+		region?: string;
+	};
 }
 
 export interface PaginationLink {

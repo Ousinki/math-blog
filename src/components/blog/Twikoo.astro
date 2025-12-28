@@ -1,0 +1,135 @@
+---
+/**
+ * Twikoo comments component with click-to-load
+ * Powered by Tencent CloudBase
+ * https://twikoo.js.org/
+ */
+
+import { siteConfig } from "@/site.config";
+
+const twikoo = siteConfig.twikoo;
+---
+
+{
+	twikoo?.enabled && (
+		<div class="twikoo-wrapper mt-8">
+			<hr class="border-gray-200 dark:border-gray-700" />
+			<div id="twikoo-container" class="py-4">
+				<button
+					id="load-twikoo-btn"
+					class="load-comments-button mx-auto block cursor-pointer px-4 py-2 text-base text-gray-600 transition-colors hover:text-accent dark:text-gray-400 dark:hover:text-accent"
+				>
+					Load Comments
+				</button>
+				<div id="twikoo-comments" class="hidden" />
+			</div>
+			<hr class="border-gray-200 dark:border-gray-700" />
+			<script is:inline data-env-id={twikoo.envId} data-region={twikoo.region || ""}>
+				document.addEventListener("DOMContentLoaded", function () {
+					const button = document.getElementById("load-twikoo-btn");
+					const commentsContainer = document.getElementById("twikoo-comments");
+
+					if (!button || commentsContainer === null) {
+						console.error("Twikoo: Button or container not found");
+						return;
+					}
+
+					let loaded = false;
+
+					function loadTwikoo() {
+						if (loaded) return;
+						loaded = true;
+
+						// Hide button and show container
+						button.style.display = "none";
+						commentsContainer.classList.remove("hidden");
+
+						// Get configuration from script data attributes
+						const scriptTag = document.currentScript || document.querySelector('script[data-env-id]');
+						const envId = scriptTag?.getAttribute("data-env-id");
+						const region = scriptTag?.getAttribute("data-region");
+
+						// Load Twikoo script
+						const script = document.createElement("script");
+						script.src = "https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js";
+						script.onload = function () {
+							// Initialize Twikoo
+							const config = {
+								envId: envId,
+								el: "#twikoo-comments",
+							};
+							
+							// Add region if specified
+							if (region) {
+								config.region = region;
+							}
+							
+							window.twikoo.init(config);
+							
+							// Setup theme observer
+							setupThemeObserver();
+						};
+						document.head.appendChild(script);
+					}
+
+					function setupThemeObserver() {
+						function updateTwikooTheme() {
+							const isDark = document.documentElement.dataset.theme === "dark";
+							const twikooEl = document.getElementById("twikoo-comments");
+							if (twikooEl) {
+								// Twikoo auto-detects system theme, but we can manually trigger re-render if needed
+								// by adding a class to help CSS styling
+								twikooEl.classList.toggle("dark-mode", isDark);
+							}
+						}
+
+						// Watch for theme changes
+						const observer = new MutationObserver((mutations) => {
+							mutations.forEach((mutation) => {
+								if (mutation.attributeName === "data-theme") {
+									updateTwikooTheme();
+								}
+							});
+						});
+
+						observer.observe(document.documentElement, {
+							attributes: true,
+							attributeFilter: ["data-theme"],
+						});
+
+						// Initial theme setup
+						updateTwikooTheme();
+					}
+
+					// Load comments when button is clicked
+					button.addEventListener("click", loadTwikoo);
+				});
+			</script>
+		</div>
+	)
+}
+
+<style is:global>
+	/* Twikoo dark mode styles */
+	.dark-mode .tk-submit,
+	.dark-mode .tk-comments {
+		--tw-bg-opacity: 1;
+		background-color: transparent;
+	}
+	
+	.dark-mode .tk-input {
+		background-color: rgba(255, 255, 255, 0.05);
+		border-color: rgba(255, 255, 255, 0.1);
+		color: inherit;
+	}
+	
+	.dark-mode .tk-content {
+		color: inherit;
+	}
+	
+	/* Make Twikoo respect dark mode */
+	[data-theme="dark"] .twikoo-wrapper {
+		--twikoo-text-color: #e5e7eb;
+		--twikoo-bg-color: transparent;
+	}
+</style>

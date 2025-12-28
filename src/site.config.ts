@@ -28,10 +28,10 @@ export const siteConfig: SiteConfig = {
 	title: "ΣathLab Journal", // 這裏是網站主標題！
 	// ! Please remember to replace the following site property with your own domain, used in astro.config.ts
 	url: "https://math-blog-6hw.pages.dev/",
-	// Giscus comments configuration
+	// Giscus comments configuration (disabled, using Twikoo instead)
 	// Visit https://giscus.app/ to get your repo and category IDs
 	giscus: {
-		enabled: true,
+		enabled: false,
 		repo: "Ousinki/math-blog",
 		repoId: "R_kgDOQpx8OA",
 		category: "General",
@@ -39,8 +39,15 @@ export const siteConfig: SiteConfig = {
 		mapping: "pathname",
 		reactionsEnabled: true,
 		emitMetadata: false,
-		inputPosition: "top", // 評論輸入框在頂部
+		inputPosition: "top",
 		lang: "zh-CN",
+	},
+	// Twikoo comments configuration
+	// https://twikoo.js.org/
+	twikoo: {
+		enabled: true,
+		envId: "cloud1-8g88jwht8659a430",
+		// region: "ap-shanghai", // 如果是上海地區可以不填
 	},
 };
 
