@@ -2,7 +2,7 @@
 import PageLayout from "@/layouts/Base.astro";
 
 const meta = {
-	description: "I'm a starter theme for Astro.build",
+	description: "關於作者 - 顏檸",
 	title: "About",
 };
 ---
@@ -10,27 +10,24 @@ const meta = {
 <PageLayout meta={meta}>
 	<h1 class="title mb-12">About</h1>
 	<div class="prose prose-sm prose-cactus max-w-none">
-		<p>
-			Hi, I’m a starter Astro. I’m particularly great for getting you started with your own blogging
-			website.
-		</p>
-		<p>Here are my some of my awesome built in features:</p>
-		<ul class="list-inside list-disc" role="list">
-			<li>I'm ultra fast as I'm a static site</li>
-			<li>I'm fully responsive</li>
-			<li>I come with a light and dark mode</li>
-			<li>I'm easy to customise and add additional content</li>
-			<li>I have Tailwind CSS styling</li>
-			<li>Shiki code syntax highlighting</li>
-			<li>Satori for auto generating OG images for blog posts</li>
-		</ul>
-		<p>
-			Clone or fork my <a
-				class="cactus-link inline-block"
-				href="https://github.com/chrismwilliams/astro-cactus"
-				rel="noreferrer"
-				target="_blank">repo</a
-			> if you like me!
-		</p>
+		<div class="flex items-start gap-6">
+			<img
+				src="/images/author.webp"
+				alt="作者頭像"
+				class="h-24 w-24 shrink-0 rounded-full object-cover shadow-lg"
+			/>
+			<div>
+				<p class="mt-0">
+					你好！我是顏檸，一名大學數學教師，畢業於華南師範大學數學專業研究生。
+					這個博客用於分享數學知識和教學心得，希望能幫助更多熱愛數學的同學！
+				</p>
+				<p>主要教授課程：</p>
+				<ul class="list-inside list-disc" role="list">
+					<li>高等數學</li>
+					<li>線性代數</li>
+					<li>概率論與數理統計</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 </PageLayout>

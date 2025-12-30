@@ -1,9 +1,9 @@
 ---
-title: Hello, Welcome
-description: An introduction to using the note feature in Astro Cactus
-publishDate: "2024-10-14T11:23:00Z"
+title: 歡迎來到數學筆記
+description: 這裡記錄一些數學小知識和學習心得
+publishDate: "2025-12-30T12:00:00Z"
 ---
 
-Hi, Hello. This is an example note feature included with Astro Cactus.
+歡迎來到我的數學筆記！
 
-They're for shorter, concise "post's" that you'd like to share, they generally don't include headings, but hey, that's entirely up to you.
+這個區域用於記錄一些簡短的數學小知識、公式速查和學習心得。每一條筆記都是學習路上的小小收穫，希望對你有所幫助！
