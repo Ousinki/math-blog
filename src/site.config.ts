@@ -46,7 +46,7 @@ export const siteConfig: SiteConfig = {
 	// https://twikoo.js.org/
 	twikoo: {
 		enabled: true,
-		envId: "http://114.55.243.162:8080",
+		envId: "https://twikoo.mathblog.cn",
 		// region: "ap-shanghai", // 如果是上海地區可以不填
 	},
 };
