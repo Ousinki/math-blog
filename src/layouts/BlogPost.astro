@@ -196,7 +196,7 @@ try {
 			isCompareMode = !isCompareMode;
 
 			if (isCompareMode) {
-				// 複製整個文章內容（包括標題和日期）
+				// 複製整個文章內容（包括標題和日期，但排除評論）
 				const blogHero = article.querySelector("#blog-hero");
 				const proseContent = article.querySelector(".prose");
 
@@ -205,7 +205,13 @@ try {
 					contentHtml += blogHero.outerHTML;
 				}
 				if (proseContent) {
-					contentHtml += proseContent.outerHTML;
+					// 克隆 prose 內容並移除評論相關元素
+					const clonedProse = proseContent.cloneNode(true) as HTMLElement;
+					// 移除 Twikoo 評論
+					clonedProse.querySelector("#twikoo-container")?.parentElement?.remove();
+					// 移除 Webmentions
+					clonedProse.querySelectorAll('[class*="webmention"]').forEach((el) => el.remove());
+					contentHtml += clonedProse.outerHTML;
 				}
 				renderedContent.innerHTML = contentHtml;
 				sourceContent.textContent = mdxSource;
@@ -239,9 +245,14 @@ try {
 			}
 		}
 
-		// 按 R 鍵切換對照模式
+		// 按 R 鍵切換對照模式（不能有修飾鍵）
 		document.addEventListener("keydown", (e) => {
 			if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+				return;
+			}
+
+			// 忽略有修飾鍵的情況（Cmd+R, Ctrl+R 等）
+			if (e.metaKey || e.ctrlKey || e.altKey) {
 				return;
 			}
 

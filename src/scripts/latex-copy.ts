@@ -24,16 +24,23 @@ function initLatexCopy() {
 
 			// Get the LaTeX source code
 			const latexSource = annotation.textContent || "";
+			
+			// 判斷是行內公式還是塊級公式
+			const isBlock = element.classList.contains("katex-display") || 
+				element.closest(".katex-display") !== null;
+			
+			// 添加 $ 或 $$ 包裹
+			const wrappedLatex = isBlock ? `$$${latexSource}$$` : `$${latexSource}$`;
 
 			try {
 				// Copy to clipboard using modern Clipboard API
-				await navigator.clipboard.writeText(latexSource);
+				await navigator.clipboard.writeText(wrappedLatex);
 
 				// Show success feedback
 				showCopyFeedback(element as HTMLElement);
 			} catch (err) {
 				// Fallback for older browsers
-				fallbackCopyToClipboard(latexSource, element as HTMLElement);
+				fallbackCopyToClipboard(wrappedLatex, element as HTMLElement);
 			}
 		});
 	});
